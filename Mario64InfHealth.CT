@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="28">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>3</ID>
+      <Description>"InfHealth"</Description>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : mario.exe
+  Version: 
+  Date   : 2020-05-11
+  Author : zachary7829
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(InfHealth,mario.exe,66 89 90 EA 00 00 00 48 8B 45 10 0F B6 80 EE) // should be unique
+alloc(newmem,$1000,"mario.exe"+6BEE9)
+
+label(code)
+label(originalCode)
+label(return)
+
+newmem:
+
+code:
+  pushf
+  cmp [rax+000000EA],dx
+  jl originalCode
+  popf
+  jmp return
+
+originalCode:
+  popf
+  mov [rax+000000EA],dx
+  jmp return
+
+InfHealth:
+  jmp newmem
+  nop
+  nop
+return:
+registersymbol(InfHealth)
+
+[DISABLE]
+
+InfHealth:
+  db 66 89 90 EA 00 00 00
+
+unregistersymbol(InfHealth)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: "mario.exe"+6BEE9
+
+"mario.exe"+6BEBE: 48 8B 45 10                 -  mov rax,[rbp+10]
+"mario.exe"+6BEC2: 88 90 EF 00 00 00           -  mov [rax+000000EF],dl
+"mario.exe"+6BEC8: 48 8B 45 10                 -  mov rax,[rbp+10]
+"mario.exe"+6BECC: 0F B6 80 EE 00 00 00        -  movzx eax,byte ptr [rax+000000EE]
+"mario.exe"+6BED3: 84 C0                       -  test al,al
+"mario.exe"+6BED5: 74 31                       -  je mario.exe+6BF08
+"mario.exe"+6BED7: 48 8B 45 10                 -  mov rax,[rbp+10]
+"mario.exe"+6BEDB: 0F B7 80 EA 00 00 00        -  movzx eax,word ptr [rax+000000EA]
+"mario.exe"+6BEE2: 8D 50 C0                    -  lea edx,[rax-40]
+"mario.exe"+6BEE5: 48 8B 45 10                 -  mov rax,[rbp+10]
+// ---------- INJECTING HERE ----------
+"mario.exe"+6BEE9: 66 89 90 EA 00 00 00        -  mov [rax+000000EA],dx
+// ---------- DONE INJECTING  ----------
+"mario.exe"+6BEF0: 48 8B 45 10                 -  mov rax,[rbp+10]
+"mario.exe"+6BEF4: 0F B6 80 EE 00 00 00        -  movzx eax,byte ptr [rax+000000EE]
+"mario.exe"+6BEFB: 8D 50 FF                    -  lea edx,[rax-01]
+"mario.exe"+6BEFE: 48 8B 45 10                 -  mov rax,[rbp+10]
+"mario.exe"+6BF02: 88 90 EE 00 00 00           -  mov [rax+000000EE],dl
+"mario.exe"+6BF08: 48 8B 45 10                 -  mov rax,[rbp+10]
+"mario.exe"+6BF0C: 0F B7 80 EA 00 00 00        -  movzx eax,word ptr [rax+000000EA]
+"mario.exe"+6BF13: 66 3D 80 08                 -  cmp ax,0880
+"mario.exe"+6BF17: 7E 0D                       -  jle mario.exe+6BF26
+"mario.exe"+6BF19: 48 8B 45 10                 -  mov rax,[rbp+10]
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
